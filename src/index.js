@@ -13,15 +13,12 @@ const refs = {
 const DEBOUNCE_DELAY = 300;
 let name = '';
 
-refs.inputEl.addEventListener(
-  'input',
-  debounce(onInputElSearch, DEBOUNCE_DELAY)
-);
+refs.inputEl.addEventListener('input', debounce(onInputElSearch, DEBOUNCE_DELAY));
 
 function onInputElSearch(e) {
   // e.preventDefault();
   //  ?
-  name = e.target.value.trim();
+  name = e.target.value;
   // Якщо поле пошуку чисте, то інформація про країну зникає.
   if (name === '') {
     clearPage();
@@ -30,13 +27,13 @@ function onInputElSearch(e) {
   // Виконай санітизацію введеного рядка методом trim(),
   // ?
   fetchCountries(name)
-    .then(renderInputDate)
+    .then(countries => renderInputDate)
     .catch(error => {
       Notify.warning('Oops, there is no country with that name');
       clearPage();
     })
-    .finally(refs.inputEl.reset());
-}
+    // .finally(refs.inputEl.reset());
+
 
 function renderInputDate(countries) {
   if (countries.length > 10) {
@@ -49,14 +46,14 @@ function renderInputDate(countries) {
 }
 
 
-function renderCountriesData({ countries }) {
-  const markup = country.map(country => {
+function renderCountriesData(countries) {
+  const markup = countries.map(country => {
     return countriesList.json('');
   });
   refs.countryListEl.innerHTML = markup;
 }
 
-function renderCountyCard({ country }) {
+function renderCountyCard(country) {
   const markup = countryCard.json('');
   refs.countryInfoEl.innerHTML = markup;
 }
@@ -67,4 +64,4 @@ function clearPage() {
     return;
 }
 
-
+}
