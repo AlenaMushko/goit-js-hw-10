@@ -1,11 +1,31 @@
 import './css/styles.css';
+import FetchCountries from './fetchCountries';
 import { Notify } from 'notiflix/build/notiflix-notify-aio';
+import debounce from 'lodash.debounce';
 
 // Notify.warning('Oops, there is no country with that name');
 // Notify.info('Too many matches found. Please enter a more specific name.');
-// _.debounce
+
+const refs = {
+  inputEl: document.getElementById('search-box'),
+  countryListEl: document.querySelector('.country-list'),
+  countryInfoEl: document.querySelector('.country-info'),
+};
+
+console.log(refs.inputEl);
+console.log(refs.countryListEl);
+ console.log(refs.countryInfoEl );
 
 const DEBOUNCE_DELAY = 300;
+const fetchCountries = new FetchCountries();
+
+refs.inputEl.addEventListener('input', debounce(onInputElSearch, DEBOUNCE_DELAY));
+
+function onInputElSearch(e) {
+
+ 
+}
+
 // HTTP-запит
 // Використовуй публічний API Rest Countries v2, а саме ресурс name, який повертає масив об'єктів країн, 
 // що задовольнили критерій пошуку.Додай мінімальне оформлення елементів інтерфейсу.
