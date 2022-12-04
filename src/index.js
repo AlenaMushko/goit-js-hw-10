@@ -1,10 +1,8 @@
 import './css/styles.css';
-import FetchCountries from './fetchCountries';
+import { fetchCountries } from './fetchCountries';
+import { countriesList, countryCard } from './templates';
 import { Notify } from 'notiflix/build/notiflix-notify-aio';
 import debounce from 'lodash.debounce';
-
-// Notify.warning('Oops, there is no country with that name');
-// Notify.info('Too many matches found. Please enter a more specific name.');
 
 const refs = {
   inputEl: document.getElementById('search-box'),
@@ -12,62 +10,61 @@ const refs = {
   countryInfoEl: document.querySelector('.country-info'),
 };
 
-console.log(refs.inputEl);
-console.log(refs.countryListEl);
- console.log(refs.countryInfoEl );
-
 const DEBOUNCE_DELAY = 300;
-const fetchCountries = new FetchCountries();
+let name = '';
 
-refs.inputEl.addEventListener('input', debounce(onInputElSearch, DEBOUNCE_DELAY));
+refs.inputEl.addEventListener(
+  'input',
+  debounce(onInputElSearch, DEBOUNCE_DELAY)
+);
 
 function onInputElSearch(e) {
-
- 
+  // e.preventDefault();
+  //  ?
+  name = e.target.value.trim();
+  // Якщо поле пошуку чисте, то інформація про країну зникає.
+  if (name === '') {
+    clearPage();
+  }
+  // Метод trim() удаляет пробелы с обеих сторон строки
+  // Виконай санітизацію введеного рядка методом trim(),
+  // ?
+  fetchCountries(name)
+    .then(renderInputDate)
+    .catch(error => {
+      Notify.warning('Oops, there is no country with that name');
+      clearPage();
+    })
+    .finally(refs.inputEl.reset());
 }
 
-// HTTP-запит
-// Використовуй публічний API Rest Countries v2, а саме ресурс name, який повертає масив об'єктів країн, 
-// що задовольнили критерій пошуку.Додай мінімальне оформлення елементів інтерфейсу.
+function renderInputDate(countries) {
+  if (countries.length > 10) {
+    Notify.info('Too many matches found. Please enter a more specific name.');
+  } else if ( countries.length <= 10) {
+    renderCountriesData();
+  } else if (countries.length === 1) {
+    renderCountyCard();
+  }
+}
 
-// Напиши функцію fetchCountries(name), яка робить HTTP - запит на ресурс name і повертає проміс з масивом
-// країн - результатом запиту.Винеси її в окремий файл fetchCountries.js і зроби іменований експорт.
 
-// Фільтрація полів
-// У відповіді від бекенду повертаються об'єкти, велика частина властивостей яких, тобі не знадобиться. 
-// Щоб скоротити обсяг переданих даних, додай рядок параметрів запиту - таким чином цей бекенд реалізує 
-// фільтрацію полів.Ознайомся з документацією синтаксису фільтрів.
+function renderCountriesData({ countries }) {
+  const markup = country.map(country => {
+    return countriesList.json('');
+  });
+  refs.countryListEl.innerHTML = markup;
+}
 
-// Тобі потрібні тільки наступні властивості:
-// name.official - повна назва країни
-// capital - столиця
-// population - населення
-// flags.svg - посилання на зображення прапора
-// languages - масив мов
-// Поле пошуку
-// Назву країни для пошуку користувач вводить у текстове поле input#search-box. HTTP-запити виконуються
-//  при введенні назви країни, тобто на події input.Але робити запит з кожним натисканням клавіші не можна,
-//   оскільки одночасно буде багато запитів і вони будуть виконуватися в непередбачуваному порядку.
+function renderCountyCard({ country }) {
+  const markup = countryCard.json('');
+  refs.countryInfoEl.innerHTML = markup;
+}
 
-// Необхідно застосувати прийом Debounce на обробнику події і робити HTTP-запит через 300мс після того, 
-// як користувач перестав вводити текст.Використовуй пакет lodash.debounce.
+function clearPage() {
+   refs.countryListEl.innerHTML = '';
+    refs.countryInfoEl.innerHTML = '';
+    return;
+}
 
-// Якщо користувач повністю очищає поле пошуку, то HTTP-запит не виконується, а розмітка списку країн або 
-// інформації про країну зникає.
 
-// Виконай санітизацію введеного рядка методом trim(), це вирішить проблему, коли в полі введення тільки 
-// пробіли, або вони є на початку і в кінці рядка.
-// Метод trim() удаляет пробелы с обеих сторон строки
-// Інтерфейс
-// Якщо у відповіді бекенд повернув більше ніж 10 країн, в інтерфейсі з'являється повідомлення про те,
-//  що назва повинна бути специфічнішою.Для повідомлень використовуй бібліотеку notiflix і виводь такий 
-// рядок "Too many matches found. Please enter a more specific name."
-// Якщо бекенд повернув від 2 - х до 10 - и країн, під тестовим полем відображається список знайдених 
-// країн.Кожен елемент списку складається з прапора та назви країни.
-// Якщо результат запиту - це масив з однією країною, в інтерфейсі відображається розмітка картки з 
-// даними про країну: прапор, назва, столиця, населення і мови.
-// Обробка помилки
-// Якщо користувач ввів назву країни, якої не існує, бекенд поверне не порожній масив, а помилку зі 
-// статус кодом 404 - не знайдено.Якщо це не обробити, то користувач ніколи не дізнається про те, що 
-// пошук не дав результатів.Додай повідомлення "Oops, there is no country with that name" у разі помилки,
-//  використовуючи бібліотеку notiflix.
