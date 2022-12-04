@@ -1,4 +1,9 @@
 import './css/styles.css';
+import { Notify } from 'notiflix/build/notiflix-notify-aio';
+
+// Notify.warning('Oops, there is no country with that name');
+// Notify.info('Too many matches found. Please enter a more specific name.');
+// _.debounce
 
 const DEBOUNCE_DELAY = 300;
 // HTTP-запит
@@ -32,7 +37,7 @@ const DEBOUNCE_DELAY = 300;
 
 // Виконай санітизацію введеного рядка методом trim(), це вирішить проблему, коли в полі введення тільки 
 // пробіли, або вони є на початку і в кінці рядка.
-
+// Метод trim() удаляет пробелы с обеих сторон строки
 // Інтерфейс
 // Якщо у відповіді бекенд повернув більше ніж 10 країн, в інтерфейсі з'являється повідомлення про те,
 //  що назва повинна бути специфічнішою.Для повідомлень використовуй бібліотеку notiflix і виводь такий 
