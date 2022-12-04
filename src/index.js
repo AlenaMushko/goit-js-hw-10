@@ -13,7 +13,10 @@ const refs = {
 const DEBOUNCE_DELAY = 300;
 let name = '';
 
-refs.inputEl.addEventListener('input', debounce(onInputElSearch, DEBOUNCE_DELAY));
+refs.inputEl.addEventListener(
+  'input',
+  debounce(onInputElSearch, DEBOUNCE_DELAY)
+);
 
 function onInputElSearch(e) {
   // e.preventDefault();
@@ -26,42 +29,47 @@ function onInputElSearch(e) {
   // Метод trim() удаляет пробелы с обеих сторон строки
   // Виконай санітизацію введеного рядка методом trim(),
   // ?
+
   fetchCountries(name)
     .then(countries => renderInputDate)
     .catch(error => {
       Notify.warning('Oops, there is no country with that name');
       clearPage();
-    })
-    // .finally(refs.inputEl.reset());
+    });
+  // .finally(refs.inputEl.reset());
+};
 
+ function renderInputDate(countries) {
+   renderCountriesData();
+   renderCountyCard();
+    if (countries.length > 10) {
+      Notify.info('Too many matches found. Please enter a more specific name.');
+    }
+   
+   if (countries.length <= 10) {
+      renderCountriesData();
+   }
 
-function renderInputDate(countries) {
-  if (countries.length > 10) {
-    Notify.info('Too many matches found. Please enter a more specific name.');
-  } else if ( countries.length <= 10) {
-    renderCountriesData();
-  } else if (countries.length === 1) {
-    renderCountyCard();
-  }
-}
-
+   if (countries.length === 1) {
+      renderCountyCard();
+    }
+};
 
 function renderCountriesData(countries) {
   const markup = countries.map(country => {
-    return countriesList.json('');
-  });
+    countriesList(country)
+  }).join('');
   refs.countryListEl.innerHTML = markup;
+  console.log(countries);
 }
 
 function renderCountyCard(country) {
-  const markup = countryCard.json('');
+  const markup = countryCard(country).join('');
   refs.countryInfoEl.innerHTML = markup;
 }
 
 function clearPage() {
-   refs.countryListEl.innerHTML = '';
-    refs.countryInfoEl.innerHTML = '';
-    return;
-}
-
+  refs.countryListEl.innerHTML = '';
+  refs.countryInfoEl.innerHTML = '';
+  return;
 }

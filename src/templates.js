@@ -1,6 +1,6 @@
 export function countriesList({ name, flags }) {
   return `
-    <li class="country-item"><img class="country-img" src="${flags.svg}" alt="flag of ${name.official}" width="140"/>
+    <li class="country-item"><img class="country-img" src="${flags.svg}" alt="flag of ${name.official}" width="60"/>
         <p class="counry-title">${name.official}</p>
       </li>
     `;
