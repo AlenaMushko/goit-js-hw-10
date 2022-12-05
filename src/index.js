@@ -21,7 +21,7 @@ refs.inputEl.addEventListener(
 
 function onInputElSearch(e) {
   // Метод trim() удаляет пробелы с обеих сторон строки
-  name = e.target.value.trim();
+  name = refs.inputEl.value.trim();
   // Якщо поле пошуку чисте, то інформація про країну зникає.
   if (name === '') {
     clearPage();
