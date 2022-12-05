@@ -1,5 +1,7 @@
+import './css/my.css';
 import './css/styles.css';
-import { fetchCountry } from './fetchCountries';
+
+import { fetchCountries } from './fetchCountries';
 import { countriesList, countryCard } from './templates';
 import { Notify } from 'notiflix/build/notiflix-notify-aio';
 import debounce from 'lodash.debounce';
@@ -19,51 +21,44 @@ refs.inputEl.addEventListener(
 );
 
 function onInputElSearch(e) {
-  // e.preventDefault();
-  //  ?
-  name = e.target.value;
+  // Метод trim() удаляет пробелы с обеих сторон строки
+  name = e.target.value.trim();
   // Якщо поле пошуку чисте, то інформація про країну зникає.
   if (name === '') {
     clearPage();
   }
 
- 
-  fetchCountry(name)
-    .then(countries => renderInputDate)
+  fetchCountries(name)
+    .then(renderInputDate)
     .catch(error => {
       Notify.warning('Oops, there is no country with that name');
       clearPage();
+      return error;
     });
-  // .finally(refs.inputEl.reset());
-};
-
- function renderInputDate(countries) {
-   renderCountriesData();
-   renderCountyCard();
-    if (countries.length > 10) {
-      Notify.info('Too many matches found. Please enter a more specific name.');
-    }
-   
-   if (countries.length <= 10) {
-      renderCountriesData();
-   }
-
-   if (countries.length === 1) {
-      renderCountyCard();
-    }
-};
-
-function renderCountriesData(countries) {
-  const markup = countries.map(country => {
-    countriesList(country)
-  }).join('');
-  refs.countryListEl.innerHTML = markup;
-  console.log(countries);
 }
 
-function renderCountyCard(country) {
-  const markup = countryCard(country).join('');
+function renderInputDate(countries) {
+  if (Number(countries.length) > 10) {
+    Notify.info('Too many matches found. Please enter a more specific name.');
+  } else if (Number(countries.length) > 1) {
+    renderCountriesData(countries);
+    refs.countryInfoEl.innerHTML = '';
+  } else if (Number(countries.length) === 1) {
+    renderCountyCard(countries);
+    refs.countryListEl.innerHTML = '';
+  }
+}
+
+function renderCountriesData(countries) {
+  const markup = countries.map(country => countriesList(country)).join('');
+  refs.countryListEl.innerHTML = markup;
+  console.log(markup);
+}
+
+function renderCountyCard(countries) {
+  const markup = countries.map(country => countryCard(country)).join('');
   refs.countryInfoEl.innerHTML = markup;
+  console.log(markup);
 }
 
 function clearPage() {
