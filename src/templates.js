@@ -6,14 +6,14 @@ export function countriesList({ name, flags }) {
     `;
 }
 
-export function countryCard({ name, capital, population, flags, languages }) {
-  return `
-  <div class="card-wrap">
-  <img class="card-img" src="${flags.svg}" alt="flag of ${name.official}" width="140" />
-  <p class="card-title">${name.official}</p>
-</div>
-<p class="card-text"><span>Capital:</span>${capital}</p>
-<p class="card-text"><span>Population:</span>${population}</p>
-<p class="card-text"><span>Languages:</span>${languages}</p>
-  `;
-}
+// export function countryCard({ name, capital, population, flags, languages }) {
+//   return `
+//   <div class="card-wrap">
+//   <img class="card-img" src="${flags.svg}" alt="flag of ${name.official}" width="140" />
+//   <p class="card-title">${name.official}</p>
+// </div>
+// <p class="card-text"><span>Capital:</span>${capital}</p>
+// <p class="card-text"><span>Population:</span>${population}</p>
+// <p class="card-text"><span>Languages:</span>${languages}</p>
+//   `;
+// }
