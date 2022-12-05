@@ -1,5 +1,5 @@
 import './css/styles.css';
-import { fetchCountries } from './fetchCountries';
+import { fetchCountry } from './fetchCountries';
 import { countriesList, countryCard } from './templates';
 import { Notify } from 'notiflix/build/notiflix-notify-aio';
 import debounce from 'lodash.debounce';
@@ -26,11 +26,9 @@ function onInputElSearch(e) {
   if (name === '') {
     clearPage();
   }
-  // Метод trim() удаляет пробелы с обеих сторон строки
-  // Виконай санітизацію введеного рядка методом trim(),
-  // ?
 
-  fetchCountries(name)
+ 
+  fetchCountry(name)
     .then(countries => renderInputDate)
     .catch(error => {
       Notify.warning('Oops, there is no country with that name');
