@@ -1,6 +1,5 @@
-import './css/my.css';
 import './css/styles.css';
-
+import './css/my.css';
 import { fetchCountries } from './fetchCountries';
 import { countriesList, countryCard } from './templates';
 import { Notify } from 'notiflix/build/notiflix-notify-aio';
